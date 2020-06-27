@@ -27,4 +27,5 @@ void readDistance() {
   // Prints the distance on the Serial Monitor
   Serial.print("Distance: ");
   Serial.println(distance);
+  publish("smarthome/watertank/waterlevel", String(distance).c_str());
 }

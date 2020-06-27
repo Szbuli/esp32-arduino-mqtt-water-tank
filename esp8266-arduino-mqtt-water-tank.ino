@@ -1,7 +1,6 @@
+const int sensorReadFrequencyMin = 1;
 
-int loopCount = 0;
-
-const int sensorReadFrequencyMin = 2;
+int loopCount = sensorReadFrequencyMin * 600;
 
 void setup() {
   Serial.begin(115200);

@@ -4,16 +4,9 @@
 
 Adafruit_BME280 bme;
 
-#define LIST_SIZE 3
-
 bool bme280Status;
 
 float temperature, humidity;
-
-float temperatureList[LIST_SIZE] = { -1000, -1000, -1000};
-float humidityList[LIST_SIZE] = { -1000, -1000, -1000};
-
-int avgListCounter = 0;
 
 void setupBme280() {
   bme280Status = bme.begin(0x76);
@@ -25,24 +18,14 @@ void setupBme280() {
 
 }
 
-float getAvg(int list[], const int size) {
-  float avg = 0;
-  int numberOfElements = 0;
-  for (int i = 0; i < size; i++) {
-    if (list[i] < -1000) {
-      continue;
-    }
-    numberOfElements++;
-    avg += list[i];
-    printf("%u\n", list[i]);
-  }
-}
-
 void readBme280() {
-  temperatureList[avgListCounter] = bme.readTemperature();
-  humidityList[avgListCounter] = bme.readHumidity();
+  temperature = bme.readTemperature();
+  humidity = bme.readHumidity();
 
 
+
+  publish("smarthome/watertank/temperature", String(temperature).c_str());
+  publish("smarthome/watertank/humidity", String(humidity).c_str());
   Serial.print("Temperature = ");
   Serial.print(temperature);
   Serial.println("*C");

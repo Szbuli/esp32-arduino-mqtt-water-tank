@@ -45,6 +45,10 @@ void setup_wifi() {
   Serial.println(WiFi.localIP());
 }
 
+void publish(char* topic, const char* payload) {
+  client.publish(topic, payload);
+}
+
 void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message arrived [");
   Serial.print(topic);
@@ -54,8 +58,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println();
 
-  if (strcmp(topic, "watertank/set/pump") == 0) {
-    if ((char)payload[0] == '1') {
+  if (strcmp(topic, "smarthome/watertank/pump/set") == 0) {
+    if ((char)payload[1] == 'N') {
       turnOnRelay();
     } else {
       turnOffRelay();
@@ -76,9 +80,7 @@ void reconnect() {
       // Once connected, publish an announcement...
       client.publish("outTopic", "hello world");
       // ... and resubscribe
-      client.subscribe("watertank/set/pump");
-      client.subscribe("watertank/status/pump");
-      client.subscribe("watertank/status/waterlevel");
+      client.subscribe("smarthome/watertank/pump/set");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());

@@ -8,6 +8,10 @@ const char* ssid[] = WIFI_SSID;
 const char* password[] = WIFI_PASSWD;
 const char* mqtt_server = MQTT_HOST;
 const int ssidCount = sizeof(ssid) / sizeof(ssid[0]);
+const char* ONLINE_PAYLOAD = "online";
+const char* OFFLINE_PAYLOAD = "offline";
+const char* STATUS_TOPIC = "smarthome/watertank/status";
+const char* PUMP_TOPIC = "smarthome/watertank/pump/set";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -58,7 +62,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println();
 
-  if (strcmp(topic, "smarthome/watertank/pump/set") == 0) {
+  if (strcmp(topic, PUMP_TOPIC) == 0) {
     if ((char)payload[1] == 'N') {
       turnOnRelay();
     } else {
@@ -75,12 +79,13 @@ void reconnect() {
     String clientId = "ESP8266Client-";
     clientId += String(random(0xffff), HEX);
     // Attempt to connect
-    if (client.connect(clientId.c_str(), "smarthome", "smarthome")) {
+    if (client.connect(clientId.c_str(), "smarthome", "smarthome",
+                       STATUS_TOPIC, 0, true, OFFLINE_PAYLOAD)) {
       Serial.println("connected");
       // Once connected, publish an announcement...
-      client.publish("outTopic", "hello world");
+      client.publish(STATUS_TOPIC, ONLINE_PAYLOAD, true);
       // ... and resubscribe
-      client.subscribe("smarthome/watertank/pump/set");
+      client.subscribe(PUMP_TOPIC);
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());

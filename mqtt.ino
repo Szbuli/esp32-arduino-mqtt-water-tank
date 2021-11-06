@@ -6,14 +6,15 @@
 
 const char* ssid[] = WIFI_SSID;
 const char* password[] = WIFI_PASSWD;
-const char* mqtt_server = MQTT_HOST;
+
 const int ssidCount = sizeof(ssid) / sizeof(ssid[0]);
 const char* ONLINE_PAYLOAD = "online";
 const char* OFFLINE_PAYLOAD = "offline";
 const char* STATUS_TOPIC = "smarthome/watertank/status";
 const char* PUMP_TOPIC = "smarthome/watertank/pump/set";
 
-WiFiClient espClient;
+X509List caCertX509(MQTT_CA_CERT);
+WiFiClientSecure espClient;
 PubSubClient client(espClient);
 ESP8266WiFiMulti WiFiMulti;
 
@@ -24,7 +25,11 @@ int value = 0;
 void setupMqtt() {
   setup_wifi();
 
-  client.setServer(mqtt_server, 1883);
+  espClient.setTrustAnchors(&caCertX509);
+  espClient.allowSelfSignedCerts();
+  espClient.setFingerprint(MQTT_CERT_FINGERPRINT);
+
+  client.setServer(MQTT_HOST, MQTT_PORT);
   client.setCallback(callback);
 }
 
@@ -79,7 +84,7 @@ void reconnect() {
     String clientId = "ESP8266Client-";
     clientId += String(random(0xffff), HEX);
     // Attempt to connect
-    if (client.connect(clientId.c_str(), "smarthome", "smarthome",
+    if (client.connect(clientId.c_str(), MQTT_USERNAME, MQTT_PASSWORD,
                        STATUS_TOPIC, 0, true, OFFLINE_PAYLOAD)) {
       Serial.println("connected");
       // Once connected, publish an announcement...

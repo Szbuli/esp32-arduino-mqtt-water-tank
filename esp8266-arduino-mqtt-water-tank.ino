@@ -6,7 +6,7 @@ void setup() {
   Serial.begin(115200);
 
   setupDistanceSensor();
-  setupBme280();
+  setupDs18b20();
   setupRelay();
 
   setupMqtt();
@@ -17,7 +17,7 @@ void loop() {
 
   if (loopCount == sensorReadFrequencyMin * 600) {
     loopCount = 0;
-    readBme280();
+    readDs18b20();
     readDistance();
   }
 

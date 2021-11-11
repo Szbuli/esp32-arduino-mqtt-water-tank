@@ -1,3 +1,8 @@
+#include "mqtt_topics.h"
+#include <ArduinoJson.h>
+
+#define VERSION "1.0.0"
+
 const int sensorReadFrequencyMin = 1;
 
 int loopCount = sensorReadFrequencyMin * 600;
@@ -10,6 +15,12 @@ void setup() {
   setupRelay();
 
   setupMqtt();
+  mqttLoop();
+
+  publishConnectivityHaDiscovery();
+  publishWaterLevelDiscovery();
+  publishPumpHaDiscovery();
+  publishDs18b20HaDiscovery();
 }
 
 void loop() {

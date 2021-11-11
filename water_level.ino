@@ -4,6 +4,10 @@ const int echoPin = 13;  //D7
 // defines variables
 long duration;
 int distance;
+int waterLevelInPercentage;
+
+#define SENSOR_LEVEL 150
+#define MAX_WATER_LEVEL 110
 
 void setupDistanceSensor() {
   pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
@@ -27,5 +31,12 @@ void readDistance() {
   // Prints the distance on the Serial Monitor
   Serial.print("Distance: ");
   Serial.println(distance);
-  publish(MQTT_WATERLEVEL_TOPIC, String(distance).c_str());
+
+  if (distance == 0) {
+    // Invalid value
+    publish(MQTT_WATERLEVEL_TOPIC, NULL);
+  } else {
+    waterLevelInPercentage = round((SENSOR_LEVEL - distance) / (float)MAX_WATER_LEVEL * 100);
+    publish(MQTT_WATERLEVEL_TOPIC, String(waterLevelInPercentage).c_str());
+  }
 }

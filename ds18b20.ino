@@ -1,8 +1,8 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
-#define ONE_WIRE_BUS 4
-#define MQTT_WATER_TEMP_TOPIC "smarthome/watertank/water/temperature"
+
+#define ONE_WIRE_BUS 4 // D2
 
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);

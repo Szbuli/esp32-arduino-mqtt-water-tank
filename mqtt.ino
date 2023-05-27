@@ -84,7 +84,7 @@ void reconnect() {
     Serial.print("Attempting MQTT connection...");
     // Create a random client ID
     String clientId = "ESP8266Client-";
-    clientId += String(random(0xffff), HEX);
+    clientId += String(WiFi.macAddress());
     // Attempt to connect
     if (client.connect(clientId.c_str(), MQTT_USERNAME, MQTT_PASSWORD,
                        MQTT_STATUS_TOPIC, 0, true, OFFLINE_PAYLOAD)) {

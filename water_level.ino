@@ -18,9 +18,9 @@ void readDistance() {
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
 
-  // Sets the trigPin on HIGH state for 10 micro seconds
+  // Sets the trigPin on HIGH state for 20 micro seconds (10 for normal, 20 for waterproof sensors)
   digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
+  delayMicroseconds(20);
   digitalWrite(trigPin, LOW);
 
   // Reads the echoPin, returns the sound wave travel time in microseconds

@@ -21,6 +21,8 @@ void setup() {
   publishWaterLevelDiscovery();
   publishPumpHaDiscovery();
   publishDs18b20HaDiscovery();
+  publishSensorHeightDiscovery();
+  publishMaxWaterLevelDiscovery();
 }
 
 void loop() {

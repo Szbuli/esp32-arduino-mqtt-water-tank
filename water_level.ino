@@ -6,13 +6,23 @@ long duration;
 int distance;
 int waterLevelInPercentage;
 
+int maxWaterLevel = 0;
+int sensorHeight = 0;
 #define SENSOR_LEVEL 150
 #define MAX_WATER_LEVEL 110
 
 void setupDistanceSensor() {
   pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
   pinMode(echoPin, INPUT); // Sets the echoPin as an Input
+
+  refreshMaxWaterLevelAndSensorHeightFromStorage();
 }
+
+void refreshMaxWaterLevelAndSensorHeightFromStorage() {
+  maxWaterLevel = getSensorHeight();
+  sensorHeight = getMaxWaterLevel();
+}
+
 void readDistance() {
   // Clears the trigPin
   digitalWrite(trigPin, LOW);
@@ -34,9 +44,9 @@ void readDistance() {
 
   if (distance == 0) {
     // Invalid value
-    publish(MQTT_WATERLEVEL_TOPIC, NULL);
+    publish(MQTT_WATER_LEVEL_TOPIC, NULL);
   } else {
-    waterLevelInPercentage = round((SENSOR_LEVEL - distance) / (float)MAX_WATER_LEVEL * 100);
-    publish(MQTT_WATERLEVEL_TOPIC, String(waterLevelInPercentage).c_str());
+    waterLevelInPercentage = round((sensorHeight - distance) / (float)maxWaterLevel * 100);
+    publish(MQTT_WATER_LEVEL_TOPIC, String(waterLevelInPercentage).c_str());
   }
 }

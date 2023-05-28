@@ -33,15 +33,48 @@ void publishConnectivityHaDiscovery() {
 
 void publishWaterLevelDiscovery() {
   StaticJsonDocument<200> doc;
-  doc["name"] = "Waterlevel";
+  doc["name"] = "Water level";
   doc["availability_topic"] = MQTT_STATUS_TOPIC;
-  doc["state_topic"] = MQTT_WATERLEVEL_TOPIC;
-  doc["unique_id"] = MQTT_WATERLEVEL_TOPIC;
+  doc["state_topic"] = MQTT_WATER_LEVEL_TOPIC;
+  doc["unique_id"] = MQTT_WATER_LEVEL_TOPIC;
   doc["unit_of_measurement"] = "%";
 
   addDeviceConfig(doc);
 
-  publishJson(MQTT_HA_DISCOVERY_WATERLEVEL_TOPIC, doc, true);
+  publishJson(MQTT_HA_DISCOVERY_WATER_LEVEL_TOPIC, doc, true);
+}
+
+void publishSensorHeightDiscovery() {
+  StaticJsonDocument<400> doc;
+  doc["name"] = "Water level sensor height";
+  doc["availability_topic"] = MQTT_STATUS_TOPIC;
+  doc["device_class"] = "distance";
+  doc["state_topic"] = MQTT_SENSOR_HEIGHT_TOPIC;
+  doc["command_topic"] = MQTT_SENSOR_HEIGHT_TOPIC;
+  doc["unique_id"] = MQTT_SENSOR_HEIGHT_TOPIC;
+  doc["unit_of_measurement"] = "cm";
+  doc["max"] = 200;
+  doc["entity_category"] = "config";
+
+  addDeviceConfig(doc);
+
+  publishJson(MQTT_HA_DISCOVERY_SENSOR_LEVEL_TOPIC, doc, true);
+}
+
+void publishMaxWaterLevelDiscovery() {
+  StaticJsonDocument<400> doc;
+  doc["name"] = "Maximum water level";
+  doc["availability_topic"] = MQTT_STATUS_TOPIC;
+  doc["state_topic"] = MQTT_MAX_WATER_LEVEL_TOPIC;
+  doc["command_topic"] = MQTT_MAX_WATER_LEVEL_TOPIC;
+  doc["unique_id"] = MQTT_MAX_WATER_LEVEL_TOPIC;
+  doc["unit_of_measurement"] = "cm";
+  doc["max"] = 200;
+  doc["entity_category"] = "config";
+
+  addDeviceConfig(doc);
+
+  publishJson(MQTT_HA_DISCOVERY_MAX_WATER_LEVEL__TOPIC, doc, true);
 }
 
 void publishPumpHaDiscovery() {

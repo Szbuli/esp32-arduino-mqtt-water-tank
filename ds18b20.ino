@@ -2,7 +2,7 @@
 #include <DallasTemperature.h>
 
 
-#define ONE_WIRE_BUS 4 // D2
+#define ONE_WIRE_BUS 4  // D2
 
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
@@ -26,5 +26,4 @@ void readDs18b20() {
   Serial.print("Temperature = ");
   Serial.print(temperature);
   Serial.println("*C");
-
 }

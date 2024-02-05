@@ -1,6 +1,7 @@
 #define MQTT_STATUS_TOPIC "smarthome/water-tank/status"
 #define MQTT_PUMP_TOPIC "smarthome/water-tank/pump/set"
 #define MQTT_WATER_LEVEL_TOPIC "smarthome/water-tank/water-level"
+#define MQTT_SENSOR_MEASURED_DISTANCE_TOPIC "smarthome/water-tank/measured-distance"
 #define MQTT_WATER_TEMP_TOPIC "smarthome/water-tank/water/temperature"
 #define MQTT_SENSOR_HEIGHT_TOPIC "smarthome/water-tank/water-level/sensor-height"
 #define MQTT_MAX_WATER_LEVEL_TOPIC "smarthome/water-tank/water-level/max-water-level"

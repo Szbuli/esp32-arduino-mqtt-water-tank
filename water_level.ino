@@ -1,52 +1,56 @@
-const int trigPin = 12;  //D6
-const int echoPin = 13;  //D7
-
-// defines variables
-long duration;
-int distance;
 int waterLevelInPercentage;
 
 int maxWaterLevel = 0;
 int sensorHeight = 0;
-#define SENSOR_LEVEL 150
-#define MAX_WATER_LEVEL 110
 
 void setupDistanceSensor() {
-  pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
-  pinMode(echoPin, INPUT); // Sets the echoPin as an Input
+  Serial2.begin(9600, SERIAL_8N1, 16, 17);
 
   refreshMaxWaterLevelAndSensorHeightFromStorage();
 }
 
 void refreshMaxWaterLevelAndSensorHeightFromStorage() {
-  maxWaterLevel = getSensorHeight();
-  sensorHeight = getMaxWaterLevel();
+  maxWaterLevel = getMaxWaterLevel();
+  Serial.print("Loaded max water level [cm]: ");
+  Serial.println(maxWaterLevel);
+
+  sensorHeight = getSensorHeight();
+  Serial.print("Loaded sensor height [cm]: ");
+  Serial.println(sensorHeight);
 }
 
 void readDistance() {
-  // Clears the trigPin
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(2);
+  Serial2.write(0x01);
 
-  // Sets the trigPin on HIGH state for 20 micro seconds (10 for normal, 20 for waterproof sensors)
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(20);
-  digitalWrite(trigPin, LOW);
+  delay(50);
+  if (Serial2.available()) {
+    getDistance();
+  }
+}
 
-  // Reads the echoPin, returns the sound wave travel time in microseconds
-  duration = pulseIn(echoPin, HIGH);
+void getDistance() {
+  unsigned int distance;
+  byte startByte, h_data, l_data, sum = 0;
+  byte buf[3];
 
-  // Calculating the distance
-  distance = duration * 0.034 / 2;
-  // Prints the distance on the Serial Monitor
-  Serial.print("Distance: ");
-  Serial.println(distance);
+  startByte = (byte)Serial2.read();
+  if (startByte == 255) {
+    Serial2.readBytes(buf, 3);
+    h_data = buf[0];
+    l_data = buf[1];
+    sum = buf[2];
 
-  if (distance == 0) {
-    // Invalid value
-    publish(MQTT_WATER_LEVEL_TOPIC, NULL);
-  } else {
+    distance = ((h_data << 8) + l_data) / 10;
+    //if (((h_data + l_data) & 0xFF) != sum) { // sum is sent incorrectly
+    while (Serial2.available()) { Serial2.read(); }
+    Serial.print("Water distance from sensor [cm]: ");
+    Serial.println(distance);
+
     waterLevelInPercentage = round((sensorHeight - distance) / (float)maxWaterLevel * 100);
     publish(MQTT_WATER_LEVEL_TOPIC, String(waterLevelInPercentage).c_str());
-  }
+    publish(MQTT_SENSOR_MEASURED_DISTANCE_TOPIC, String(distance).c_str());
+  } else {
+    while (Serial2.available()) { Serial2.read(); }
+    Serial.println("Invalid start byte");
+  };
 }

@@ -1,7 +1,8 @@
 #include "credentials.h"
 
-#include <ESP8266WiFi.h>
-#include <ESP8266WiFiMulti.h>
+#include <WiFi.h>
+#include "WiFiClientSecure.h"
+#include <WiFiMulti.h>
 #include <PubSubClient.h>
 
 const char* ssid[] = WIFI_SSID;
@@ -9,10 +10,9 @@ const char* password[] = WIFI_PASSWD;
 
 const int ssidCount = sizeof(ssid) / sizeof(ssid[0]);
 
-X509List caCertX509(MQTT_CA_CERT);
 WiFiClientSecure espClient;
 PubSubClient client(espClient);
-ESP8266WiFiMulti WiFiMulti;
+WiFiMulti WiFiMulti;
 
 long lastMsg = 0;
 char msg[50];
@@ -21,12 +21,24 @@ int value = 0;
 void setupMqtt() {
   setup_wifi();
 
-  espClient.setTrustAnchors(&caCertX509);
-  espClient.allowSelfSignedCerts();
-  espClient.setFingerprint(MQTT_CERT_FINGERPRINT);
+  espClient.setCACert(MQTT_CA_CERT);
+  espClient.setInsecure();  // TODO
 
   client.setServer(MQTT_HOST, MQTT_PORT);
   client.setCallback(callback);
+}
+
+void onWifiEvent(WiFiEvent_t event) {
+  switch (event) {
+    case WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_CONNECTED:
+      Serial.println("Connected or reconnected to WiFi");
+      break;
+    case WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_DISCONNECTED:
+      Serial.println("WiFi Disconnected. Enabling WiFi autoconnect");
+      WiFi.reconnect();
+      break;
+    default: break;
+  }
 }
 
 void setup_wifi() {
@@ -42,10 +54,14 @@ void setup_wifi() {
     Serial.print(".");
   }
 
+  WiFi.onEvent(onWifiEvent);
+
   randomSeed(micros());
 
   Serial.println("");
   Serial.println("WiFi connected");
+  Serial.print("Connected Network Signal Strength (RSSI): ");
+  Serial.println(WiFi.RSSI()); /*Print WiFi signal strength*/
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
 }
@@ -77,11 +93,11 @@ void callback(char* topic, byte* payload, unsigned int length) {
     }
   } else if (strcmp(topic, MQTT_SENSOR_HEIGHT_TOPIC) == 0) {
     payload[length] = '\0';
-    persistSensorHeight(atoi((char *)payload));
+    persistSensorHeight(atoi((char*)payload));
     refreshMaxWaterLevelAndSensorHeightFromStorage();
   } else if (strcmp(topic, MQTT_MAX_WATER_LEVEL_TOPIC) == 0) {
     payload[length] = '\0';
-    persistMaxWaterLevel(atoi((char *)payload));
+    persistMaxWaterLevel(atoi((char*)payload));
     refreshMaxWaterLevelAndSensorHeightFromStorage();
   }
 }
@@ -91,7 +107,7 @@ void reconnect() {
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
     // Create a random client ID
-    String clientId = "ESP8266Client-";
+    String clientId = "ESP32Client-";
     clientId += String(WiFi.macAddress());
     // Attempt to connect
     if (client.connect(clientId.c_str(), MQTT_USERNAME, MQTT_PASSWORD,
@@ -106,6 +122,9 @@ void reconnect() {
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
+      char lastError[100];
+      espClient.lastError(lastError, 100);
+      Serial.println(lastError);
       Serial.println(" try again in 5 seconds");
       // Wait 5 seconds before retrying
       delay(5000);

@@ -1,5 +1,6 @@
 #include "mqtt_topics.h"
 #include <ArduinoJson.h>
+#include <WiFi.h>
 
 #define VERSION "1.0.0"
 
@@ -29,6 +30,8 @@ void loop() {
   mqttLoop();
 
   if (loopCount == sensorReadFrequencyMin * 600) {
+    Serial.print("Connected Network Signal Strength (RSSI): ");
+    Serial.println(WiFi.RSSI());
     loopCount = 0;
     readDs18b20();
     readDistance();

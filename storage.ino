@@ -26,7 +26,7 @@ void persistMaxWaterLevel(int maxWaterLevel) {
 int getMaxWaterLevel() {
   EEPROM.begin(512);
   int maxWaterLevel = 0;
-  maxWaterLevel =  EEPROM.get(MAX_WATER_LEVEL_ADDRESS, maxWaterLevel);
+  maxWaterLevel = EEPROM.get(MAX_WATER_LEVEL_ADDRESS, maxWaterLevel);
   EEPROM.end();
   return maxWaterLevel;
 }

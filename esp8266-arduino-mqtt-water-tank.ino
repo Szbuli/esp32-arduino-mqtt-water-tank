@@ -22,6 +22,7 @@ void setup() {
   publishConnectivityHaDiscovery();
   publishWaterLevelDiscovery();
   publishPumpHaDiscovery();
+  publishOverflowPumpHaDiscovery();
   publishDs18b20HaDiscovery();
   publishSensorHeightDiscovery();
   publishOverflowSensorDiscovery();

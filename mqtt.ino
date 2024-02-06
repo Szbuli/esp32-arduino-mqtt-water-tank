@@ -87,9 +87,15 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   if (strcmp(topic, MQTT_PUMP_TOPIC) == 0) {
     if ((char)payload[1] == 'N') {
-      turnOnRelay();
+      turnOnRelay1();
     } else {
-      turnOffRelay();
+      turnOffRelay1();
+    }
+  } else if (strcmp(topic, MQTT_OVERFLOW_PUMP_TOPIC) == 0) {
+    if ((char)payload[1] == 'N') {
+      turnOnRelay2();
+    } else {
+      turnOffRelay2();
     }
   } else if (strcmp(topic, MQTT_SENSOR_HEIGHT_TOPIC) == 0) {
     payload[length] = '\0';
@@ -117,6 +123,7 @@ void reconnect() {
       client.publish(MQTT_STATUS_TOPIC, ONLINE_PAYLOAD, true);
       // ... and resubscribe
       client.subscribe(MQTT_PUMP_TOPIC);
+      client.subscribe(MQTT_OVERFLOW_PUMP_TOPIC);
       client.subscribe(MQTT_SENSOR_HEIGHT_TOPIC);
       client.subscribe(MQTT_MAX_WATER_LEVEL_TOPIC);
     } else {

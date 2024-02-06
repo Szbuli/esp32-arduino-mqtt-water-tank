@@ -98,10 +98,23 @@ void publishPumpHaDiscovery() {
   doc["icon"] = "mdi:water-pump";
   doc["unique_id"] = MQTT_PUMP_TOPIC;
   doc["command_topic"] = MQTT_PUMP_TOPIC;
-  
+
   addDeviceConfig(doc);
 
   publishJson(MQTT_HA_DISCOVERY_PUMP_TOPIC, doc, true);
+}
+
+void publishOverflowPumpHaDiscovery() {
+  StaticJsonDocument<200> doc;
+  doc["name"] = "Overflow pump";
+  doc["availability_topic"] = MQTT_STATUS_TOPIC;
+  doc["icon"] = "mdi:water-pump";
+  doc["unique_id"] = MQTT_OVERFLOW_PUMP_TOPIC;
+  doc["command_topic"] = MQTT_OVERFLOW_PUMP_TOPIC;
+
+  addDeviceConfig(doc);
+
+  publishJson(MQTT_HA_DISCOVERY_OVERFLOW_PUMP_TOPIC, doc, true);
 }
 
 void addDeviceConfig(JsonDocument& doc) {

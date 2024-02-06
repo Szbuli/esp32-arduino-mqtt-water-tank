@@ -55,6 +55,7 @@ void publishSensorHeightDiscovery() {
   doc["unit_of_measurement"] = "cm";
   doc["max"] = 200;
   doc["entity_category"] = "config";
+  doc["retain"] = true;
 
   addDeviceConfig(doc);
 
@@ -71,6 +72,7 @@ void publishMaxWaterLevelDiscovery() {
   doc["unit_of_measurement"] = "cm";
   doc["max"] = 200;
   doc["entity_category"] = "config";
+  doc["retain"] = true;
 
   addDeviceConfig(doc);
 

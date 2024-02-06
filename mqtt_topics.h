@@ -4,6 +4,7 @@
 #define MQTT_SENSOR_MEASURED_DISTANCE_TOPIC "smarthome/water-tank/measured-distance"
 #define MQTT_WATER_TEMP_TOPIC "smarthome/water-tank/water/temperature"
 #define MQTT_SENSOR_HEIGHT_TOPIC "smarthome/water-tank/water-level/sensor-height"
+#define MQTT_OVERFLOW_SENSOR_TOPIC "smarthome/water-tank/water-level/overflow"
 #define MQTT_MAX_WATER_LEVEL_TOPIC "smarthome/water-tank/water-level/max-water-level"
 
 #define MQTT_HA_DISCOVERY_WATER_TEMP_TOPIC "homeassistant/sensor/water-tank/water-temperature/config"
@@ -11,6 +12,7 @@
 #define MQTT_HA_DISCOVERY_WATER_LEVEL_TOPIC "homeassistant/sensor/water-tank/water-level/config"
 #define MQTT_HA_DISCOVERY_CONNECTIVITY_TOPIC "homeassistant/binary_sensor/water-tank/status/config"
 #define MQTT_HA_DISCOVERY_SENSOR_LEVEL_TOPIC "homeassistant/number/water-tank/water-level-sensor-height/config"
+#define MQTT_HA_DISCOVERY_OVERFLOW_SENSOR_LEVEL_TOPIC "homeassistant/binary_sensor/water-tank/overflow-sensor/config"
 #define MQTT_HA_DISCOVERY_MAX_WATER_LEVEL__TOPIC "homeassistant/number/water-tank/max-water-level/config"
 
 #define ONLINE_PAYLOAD "online"

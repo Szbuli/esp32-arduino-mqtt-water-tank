@@ -62,6 +62,18 @@ void publishSensorHeightDiscovery() {
   publishJson(MQTT_HA_DISCOVERY_SENSOR_LEVEL_TOPIC, doc, true);
 }
 
+void publishOverflowSensorDiscovery() {
+  StaticJsonDocument<400> doc;
+  doc["name"] = "Overflow sensor";
+  doc["availability_topic"] = MQTT_STATUS_TOPIC;
+  doc["state_topic"] = MQTT_OVERFLOW_SENSOR_TOPIC;
+  doc["unique_id"] = MQTT_OVERFLOW_SENSOR_TOPIC;
+
+  addDeviceConfig(doc);
+
+  publishJson(MQTT_HA_DISCOVERY_OVERFLOW_SENSOR_LEVEL_TOPIC, doc, true);
+}
+
 void publishMaxWaterLevelDiscovery() {
   StaticJsonDocument<400> doc;
   doc["name"] = "Maximum water level";

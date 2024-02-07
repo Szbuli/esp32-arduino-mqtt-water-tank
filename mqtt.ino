@@ -91,7 +91,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     } else {
       turnOffRelay1();
     }
-  } else if (strcmp(topic, MQTT_OVERFLOW_PUMP_TOPIC) == 0) {
+  } else if (!isOverflowPumpAutoModeEnabled() && strcmp(topic, MQTT_OVERFLOW_PUMP_TOPIC) == 0) {
     if ((char)payload[1] == 'N') {
       turnOnRelay2();
     } else {
@@ -105,6 +105,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
     payload[length] = '\0';
     persistMaxWaterLevel(atoi((char*)payload));
     refreshMaxWaterLevelAndSensorHeightFromStorage();
+  } else if (strcmp(topic, MQTT_OVERFLOW_PUMP_MODE_TOPIC) == 0) {
+    persistOverflowPumpAutoMode((char)payload[0] == 'a');
+    refreshOverflowPumpModeFromStorage();
   }
 }
 
@@ -126,6 +129,7 @@ void reconnect() {
       client.subscribe(MQTT_OVERFLOW_PUMP_TOPIC);
       client.subscribe(MQTT_SENSOR_HEIGHT_TOPIC);
       client.subscribe(MQTT_MAX_WATER_LEVEL_TOPIC);
+      client.subscribe(MQTT_OVERFLOW_PUMP_MODE_TOPIC);
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());

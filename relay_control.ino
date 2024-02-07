@@ -1,5 +1,5 @@
-const int relay1 = 14;
-const int relay2 = 12;
+const int relay1 = 18;
+const int relay2 = 19;
 
 void setupRelay() {
   digitalWrite(relay1, HIGH);

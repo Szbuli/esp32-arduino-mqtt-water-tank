@@ -117,6 +117,25 @@ void publishOverflowPumpHaDiscovery() {
   publishJson(MQTT_HA_DISCOVERY_OVERFLOW_PUMP_TOPIC, doc, true);
 }
 
+void publishOverflowPumpModeDiscovery() {
+  StaticJsonDocument<400> doc;
+  doc["name"] = "Overflow pump mode";
+  doc["availability_topic"] = MQTT_STATUS_TOPIC;
+  doc["state_topic"] = MQTT_OVERFLOW_PUMP_MODE_TOPIC;
+  doc["command_topic"] = MQTT_OVERFLOW_PUMP_MODE_TOPIC;
+  doc["unique_id"] = MQTT_OVERFLOW_PUMP_MODE_TOPIC;
+  doc["entity_category"] = "config";
+  doc["retain"] = true;
+
+  JsonArray options = doc.createNestedArray("options");
+  options.add("manual");
+  options.add("auto");
+
+  addDeviceConfig(doc);
+
+  publishJson(MQTT_HA_DISCOVERY_OVERFLOW_PUMP_MODE_TOPIC, doc, true);
+}
+
 void addDeviceConfig(JsonDocument& doc) {
   JsonObject device = doc.createNestedObject("device");
   device["sw_version"] = VERSION;

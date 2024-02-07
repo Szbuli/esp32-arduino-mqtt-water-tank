@@ -28,6 +28,7 @@ void setup() {
   publishOverflowSensorDiscovery();
   publishMaxWaterLevelDiscovery();
   publishOverflowPumpModeDiscovery();
+  publishSensorMeasuredDistanceDiscovery();
 }
 
 void loop() {

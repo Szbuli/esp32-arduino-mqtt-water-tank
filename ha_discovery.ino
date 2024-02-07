@@ -44,6 +44,20 @@ void publishWaterLevelDiscovery() {
   publishJson(MQTT_HA_DISCOVERY_WATER_LEVEL_TOPIC, doc, true);
 }
 
+void publishSensorMeasuredDistanceDiscovery() {
+  StaticJsonDocument<200> doc;
+  doc["name"] = "Measured distance";
+  doc["availability_topic"] = MQTT_STATUS_TOPIC;
+  doc["state_topic"] = MQTT_SENSOR_MEASURED_DISTANCE_TOPIC;
+  doc["unique_id"] = MQTT_SENSOR_MEASURED_DISTANCE_TOPIC;
+    doc["entity_category"] = "diagnostic";
+  doc["unit_of_measurement"] = "cm";
+
+  addDeviceConfig(doc);
+
+  publishJson(MQTT_HA_DISCOVERY_SENSOR_MEASURED_DISTANCE_TOPIC, doc, true);
+}
+
 void publishSensorHeightDiscovery() {
   StaticJsonDocument<400> doc;
   doc["name"] = "Water level sensor height";

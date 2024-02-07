@@ -14,6 +14,7 @@
 #define MQTT_HA_DISCOVERY_OVERFLOW_PUMP_TOPIC "homeassistant/switch/water-tank/overflow-pump/config"
 #define MQTT_HA_DISCOVERY_OVERFLOW_PUMP_MODE_TOPIC "homeassistant/select/water-tank/overflow-pump-mode/config"
 #define MQTT_HA_DISCOVERY_WATER_LEVEL_TOPIC "homeassistant/sensor/water-tank/water-level/config"
+#define MQTT_HA_DISCOVERY_SENSOR_MEASURED_DISTANCE_TOPIC "homeassistant/sensor/water-tank/measured-distance/config"
 #define MQTT_HA_DISCOVERY_CONNECTIVITY_TOPIC "homeassistant/binary_sensor/water-tank/status/config"
 #define MQTT_HA_DISCOVERY_SENSOR_LEVEL_TOPIC "homeassistant/number/water-tank/water-level-sensor-height/config"
 #define MQTT_HA_DISCOVERY_OVERFLOW_SENSOR_LEVEL_TOPIC "homeassistant/binary_sensor/water-tank/overflow-sensor/config"

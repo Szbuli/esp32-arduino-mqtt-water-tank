@@ -62,6 +62,18 @@ void publishSensorHeightDiscovery() {
   publishJson(MQTT_HA_DISCOVERY_SENSOR_LEVEL_TOPIC, doc, true);
 }
 
+void publishOverflowSensorDiscovery() {
+  StaticJsonDocument<400> doc;
+  doc["name"] = "Overflow sensor";
+  doc["availability_topic"] = MQTT_STATUS_TOPIC;
+  doc["state_topic"] = MQTT_OVERFLOW_SENSOR_TOPIC;
+  doc["unique_id"] = MQTT_OVERFLOW_SENSOR_TOPIC;
+
+  addDeviceConfig(doc);
+
+  publishJson(MQTT_HA_DISCOVERY_OVERFLOW_SENSOR_LEVEL_TOPIC, doc, true);
+}
+
 void publishMaxWaterLevelDiscovery() {
   StaticJsonDocument<400> doc;
   doc["name"] = "Maximum water level";
@@ -86,10 +98,42 @@ void publishPumpHaDiscovery() {
   doc["icon"] = "mdi:water-pump";
   doc["unique_id"] = MQTT_PUMP_TOPIC;
   doc["command_topic"] = MQTT_PUMP_TOPIC;
-  
+
   addDeviceConfig(doc);
 
   publishJson(MQTT_HA_DISCOVERY_PUMP_TOPIC, doc, true);
+}
+
+void publishOverflowPumpHaDiscovery() {
+  StaticJsonDocument<200> doc;
+  doc["name"] = "Overflow pump";
+  doc["availability_topic"] = MQTT_STATUS_TOPIC;
+  doc["icon"] = "mdi:water-pump";
+  doc["unique_id"] = MQTT_OVERFLOW_PUMP_TOPIC;
+  doc["command_topic"] = MQTT_OVERFLOW_PUMP_TOPIC;
+
+  addDeviceConfig(doc);
+
+  publishJson(MQTT_HA_DISCOVERY_OVERFLOW_PUMP_TOPIC, doc, true);
+}
+
+void publishOverflowPumpModeDiscovery() {
+  StaticJsonDocument<400> doc;
+  doc["name"] = "Overflow pump mode";
+  doc["availability_topic"] = MQTT_STATUS_TOPIC;
+  doc["state_topic"] = MQTT_OVERFLOW_PUMP_MODE_TOPIC;
+  doc["command_topic"] = MQTT_OVERFLOW_PUMP_MODE_TOPIC;
+  doc["unique_id"] = MQTT_OVERFLOW_PUMP_MODE_TOPIC;
+  doc["entity_category"] = "config";
+  doc["retain"] = true;
+
+  JsonArray options = doc.createNestedArray("options");
+  options.add("manual");
+  options.add("auto");
+
+  addDeviceConfig(doc);
+
+  publishJson(MQTT_HA_DISCOVERY_OVERFLOW_PUMP_MODE_TOPIC, doc, true);
 }
 
 void addDeviceConfig(JsonDocument& doc) {

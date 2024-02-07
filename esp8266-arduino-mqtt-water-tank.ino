@@ -14,6 +14,7 @@ void setup() {
   setupDistanceSensor();
   setupDs18b20();
   setupRelay();
+  setupOverflowSensor();
 
   setupMqtt();
   mqttLoop();
@@ -21,9 +22,12 @@ void setup() {
   publishConnectivityHaDiscovery();
   publishWaterLevelDiscovery();
   publishPumpHaDiscovery();
+  publishOverflowPumpHaDiscovery();
   publishDs18b20HaDiscovery();
   publishSensorHeightDiscovery();
+  publishOverflowSensorDiscovery();
   publishMaxWaterLevelDiscovery();
+  publishOverflowPumpModeDiscovery();
 }
 
 void loop() {
@@ -36,6 +40,7 @@ void loop() {
     readDs18b20();
     readDistance();
   }
+  readOverflowSensor();
 
   loopCount++;
   delay(100);

@@ -50,7 +50,7 @@ void publishSensorMeasuredDistanceDiscovery() {
   doc["availability_topic"] = MQTT_STATUS_TOPIC;
   doc["state_topic"] = MQTT_SENSOR_MEASURED_DISTANCE_TOPIC;
   doc["unique_id"] = MQTT_SENSOR_MEASURED_DISTANCE_TOPIC;
-    doc["entity_category"] = "diagnostic";
+  doc["entity_category"] = "diagnostic";
   doc["unit_of_measurement"] = "cm";
 
   addDeviceConfig(doc);

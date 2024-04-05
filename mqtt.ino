@@ -22,7 +22,6 @@ void setupMqtt() {
   setup_wifi();
 
   espClient.setCACert(MQTT_CA_CERT);
-  espClient.setInsecure();  // TODO
 
   client.setServer(MQTT_HOST, MQTT_PORT);
   client.setCallback(callback);

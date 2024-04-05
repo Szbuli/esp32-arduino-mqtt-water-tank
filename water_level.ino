@@ -25,6 +25,8 @@ void readDistance() {
   delay(50);
   if (Serial2.available()) {
     getDistance();
+  } else {
+    Serial.println("serial not ready");
   }
 }
 

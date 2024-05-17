@@ -11,7 +11,7 @@ void refreshOverflowPumpModeFromStorage() {
   Serial.print("Overflow pump auto mode enabled: ");
   Serial.println(overflowPumpAutoModeEnabled);
 
-  turnOffRelay2();
+  turnOffOverFlowPump();
 }
 
 bool isOverflowPumpAutoModeEnabled() {
@@ -48,13 +48,23 @@ void updateOverflowPumpIfNeeded(bool overflowSensorActive) {
   if (overflowPumpAutoModeEnabled && delayCounter > 5) {
     Serial.print("Turn overflow pump ");
     if (overflowSensorActive) {
-      Serial.println("ON");
-      turnOnRelay2();
+      turnOnOverFlowPump();
     } else {
-      Serial.println("OFF");
-      turnOffRelay2();
+      turnOffOverFlowPump();
     }
     delayCounter = 0;
   }
   delayCounter++;
+}
+
+void turnOnOverFlowPump() {
+  Serial.println("AUTO MODE - OVERFLOW PUNP ON");
+  publish(MQTT_OVERFLOW_PUMP_TOPIC, ON_PAYLOAD);
+  turnOnRelay2();
+}
+
+void turnOffOverFlowPump() {
+  Serial.println("AUTO MODE - OVERFLOW PUNP OFF");
+  publish(MQTT_OVERFLOW_PUMP_TOPIC, OFF_PAYLOAD);
+  turnOffRelay2();
 }
